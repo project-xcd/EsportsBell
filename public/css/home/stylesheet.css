@@ -8,6 +8,10 @@ a{
     color: black;
     text-decoration: none!important;
 }
+a:hover{
+    color: darkslategrey;
+    text-decoration: none!important;
+}
 .main-hr{
         border: 1px solid #1F2833;
         
@@ -21,6 +25,11 @@ a{
     height: auto;
     
 }
+.navbar-brand:hover{
+    width: 105px;
+    height: auto;
+    
+}
 #nav-logo{
     height: 100%;
     width: 100%;
@@ -30,6 +39,9 @@ a{
 }
 #navlink{
     color:white;
+}
+#navlink:hover{
+    color:#f7d560;
 }
 
 
@@ -52,7 +64,7 @@ a{
     
 }
 #page-info{
-    font-size: 20px;
+    font-size: 22px;
 }
 
 #latest-image{
@@ -101,7 +113,7 @@ a{
     font-weight: 600;
 }
 #post-title-text{
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 400;
     margin: 0;
 }
@@ -111,6 +123,7 @@ a{
 #p-tag{
     font-size: 14px;
     font-weight: 500;
+    color: #1F2833; 
     margin: 0px 12px 0px 0px; 
     display:inline;
     word-wrap: break-word;
@@ -149,7 +162,7 @@ a{
     
     color: white;
     font-size: 16px;
-    font-weight: lighter;
+    font-weight: 400;
     text-decoration: none!important;
     
 }
@@ -176,12 +189,11 @@ a{
     .middlecontainer{
         margin: auto;
         width: 100%;
-        padding: 5px;
+        padding: 3%;
     }
-    #soc-logo{
-        height: 25px;
+    #page-info{
+        font-size: 20px;
     }
-    
     #latest-image{
         display: flex;
        
@@ -198,11 +210,6 @@ a{
     #image{
         width:100%;
     }
-
-
-
-
-
     .flex-container{
         display: flex;
     }
@@ -223,11 +230,11 @@ a{
         padding: 0px 0px 0px 10px!important;
     }
     #post-title{
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 600;
     }
     #post-title-text{
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 400;
         margin: 0;
     }
@@ -237,14 +244,63 @@ a{
     #p-tag{
         font-size: 12px;
         font-weight: 500;
-        margin: 0px 12px 0px 0px; 
+        margin: 0px 6px 0px 0px; 
         display:inline;
         word-wrap: break-word;
     }
     .readmore{
         color:blue;
     }
-   
+    
+    .footer{
+        height: auto;
+    
+    }
+    #footermain{
+        background-color: #1F2833;
+        margin: 0;
+        padding: 10px;
+      
+      
+    
+        
+    }
+    #footertext{
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+    #footerul{
+        padding: 0;
+    }
+    .footerli{
+        padding-bottom: 2%;
+    }
+    .footernavlink{
+        
+        color: white;
+        font-size: 14px;
+        font-weight: 400;
+        text-decoration: none!important;
+        
+    }
+    #social{
+        text-align: center;
+        
+    }   
+    #soc-logo{
+        height: 32px;
+    }
+    #copyright{
+        margin: auto;
+        padding: 0;
+        width: 50%;
+    }
+    #copyrighttext{
+        color: #A39B9B;
+        font-size: 13px;
+        text-align: center;
+    }
   }
 
 

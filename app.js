@@ -15,9 +15,9 @@ const moment = require('moment');
 const mkdirp = require("mkdirp");
 const rimraf = require("rimraf");
 
-const login = require('./routes/login.js')
-const logout = require('./routes/logout.js')
-
+const login = require('./routes/login.js');
+const logout = require('./routes/logout.js');
+var selected = [];
 
 app.set('view engine','ejs');
 
@@ -166,6 +166,7 @@ app.get("/profile/:userId",async function(req,res){
 
 app.get("/",async function(req,res){
   var isAuth,foundUser,uid="",foundCategories;
+  selected=[];
   if(req.isAuthenticated()){
     isAuth=true;uid=uid+req.user._id;
     await User.findOne({username:req.user.username},function(err,foundUsers){
@@ -202,7 +203,7 @@ app.get("/",async function(req,res){
                 onearticle.dateformat = dateformat         
           });
           
-          res.render("home",{userInfo:foundUser,articles:foundArticles,categories:foundCategories,auth:isAuth,userID:uid});
+          res.render("home",{userInfo:foundUser,articles:foundArticles,categories:foundCategories,selected:selected,auth:isAuth,userID:uid});
         }
     });
   }
@@ -255,6 +256,7 @@ app.get("/articles/:curSlug",async function(req,res){
 
 app.get("/categories/:getcat",async function(req,res){
   var isAuth,foundUser,usid="";
+  selected=[req.params.getcat];
   
   if(req.isAuthenticated()){
     usid=usid+req.user._id
@@ -292,8 +294,8 @@ app.get("/categories/:getcat",async function(req,res){
           foundArticles.forEach(onearticle => {
             dateformat = date_formated =  moment(onearticle.date).format('MMM Do YY') + ", " + moment(moment(onearticle.date).format('YYMMDDhmmssa'),'YYMMDDhmmssa').fromNow();   
             onearticle.dateformat = dateformat         
-      });
-          res.render("home",{userInfo:foundUser,articles:foundArticles,categories:foundCategories,auth:isAuth,userID:usid});
+         });
+          res.render("home",{userInfo:foundUser,articles:foundArticles,categories:foundCategories,selected:selected,auth:isAuth,userID:usid});
         }
       });
       

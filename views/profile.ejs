@@ -62,7 +62,7 @@
           <div class="flex-container">
               <div  id="postimagecontainer"><a href="/articles/<%=articles[i].slug%>"><img class="post-image" src="<%=articles[i].imgurl%>" ></a></div>
               <div  id="post-text-container"><a href="/articles/<%=articles[i].slug%>"><h1 id="post-title"><%=articles[i].title%></h1></a>
-                  <p id="post-title-text"><%=articles[i].body.substring(0,200)%><a class="readmore"href="/articles/<%=articles[i].slug%>">&nbsp;Read More...</a></p></div>
+                  <p id="post-title-text"><%=articles[i].body.substring(0,100)%><a class="readmore"href="/articles/<%=articles[i].slug%>">&nbsp;Read More...</a></p></div>
 
           </div>
           <div id="post-tags"><p id="p-tag"><a href="/categories/<%=articles[i].category%>"><%=articles[i].category%></a></p><p id="p-tag"> <%=articles[i].dateformat%></p><p id="p-tag"> <%=articles[i].author%></p></div>
