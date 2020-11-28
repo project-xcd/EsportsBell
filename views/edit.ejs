@@ -19,7 +19,7 @@
           <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Title" name="title" rows="1"><%=data.title%></textarea>
         </div>
         <div class="form-group">
-          <label for="exampleFormControlSelect1" style="color:white;">Game</label>
+          <label for="exampleFormControlSelect1" style="color:white;">Category</label>
           <select class="form-control" id="exampleFormControlSelect1" name="category">
             <%for(var i=0;i<categories.length;i++){%>
               <%if(data.category===categories[i].title){%>
@@ -30,15 +30,15 @@
             <%}%>
           </select>
         </div>
-        <%if(admin===true){%>
-          <div class="form-group">
+        <div class="form-group">
             <label for="exampleFormControlSelect1" style="color:white;">Image URL</label>
-            <input type="text" class="form-control" id="formGroupExampleInput" name="imgurl" placeholder="Image Info" value="<%=data.imgurl%>" required>
+            <input type="text" class="form-control" id="formGroupExampleInput" name="imgurl" placeholder="Image URL" value="<%=data.imgurl%>" required>
           </div>
           <div class="form-group">
             <label for="exampleFormControlSelect1" style="color:white;">Image Info</label>
             <input type="text" class="form-control" id="formGroupExampleInput" name="imgtext" placeholder="Image Info" value="<%=data.imgtext%>" required>
           </div>
+          <%if(admin===true){%>
           <div class="form-group">
             <label for="exampleFormControlSelect1" style="color:white;">Approve</label>
             <select class="form-control" id="exampleFormControlSelect1" name="approve">
@@ -57,10 +57,17 @@
           <label for="exampleFormControlTextarea1" style="color:white;">Body</label>
           <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Body" name="body" rows="3"><%=data.body%></textarea>
         </div>
+        <%if(admin===true){%>
         <div class="form-group">
           <label for="exampleFormControlSelect1" style="color:white;">Date</label>
-          <input type="text" class="form-control" id="formGroupExampleInput" name="date" placeholder="date" value="<%=data.date%>" required>
+          <input type="datetime" class="form-control" id="formGroupExampleInput" name="date" placeholder="date" value="<%=data.date%>" >
         </div>
+        <%}else{%>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1" style="color:white;">Date</label>
+            <input type="text" class="form-control" id="formGroupExampleInput" name="date" placeholder="date" value="<%=data.date%>" readonly>
+        </div>
+        <%}%>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>

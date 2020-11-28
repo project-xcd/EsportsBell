@@ -153,7 +153,7 @@ app.get("/profile/:userId",async function(req,res){
           foundArticles.forEach(onearticle => {
             dateformat = date_formated =  moment(onearticle.date).format('MMM Do YY') + ", " + moment(moment(onearticle.date).format('YYMMDDhmmssa'),'YYMMDDhmmssa').fromNow();   
             onearticle.dateformat = dateformat         
-      });
+          });
          
           res.render("profile",{articles:foundArticles,searchUserInfo:user,categories:foundCategories,userInfo:curUser,auth:isAuth,userID:uid});
           
@@ -491,7 +491,7 @@ app.post("/edit/:slugUrl",async function(req,res){
       res.redirect("/");
     }
     else{
-      date_now = new Date();
+      date_now = new Date(req.body.date);
       date = ("0" + date_now.getDate()).slice(-2);
       month = ("0" + (date_now.getMonth() + 1)).slice(-2);
       year = date_now.getFullYear();
@@ -499,8 +499,7 @@ app.post("/edit/:slugUrl",async function(req,res){
       prevName=foundArticle.author;
       prevId=foundArticle.authorid;
       var isApproved=false;
-      if(req.body.approve==="true") isApproved=true;
-      date_formated =  moment(req.body.date).format('MMM Do YY') + ", " + moment(moment(req.body.date).format('YYMMDDhmmssa'),'YYMMDDhmmssa').fromNow();
+      if(req.body.approve==="true" && req.user.admin) isApproved=true;
       article=new Article({
         title: req.body.title,
         slug: date+"-"+month+"-"+year+"-"+makeslug,
@@ -512,7 +511,7 @@ app.post("/edit/:slugUrl",async function(req,res){
         author: prevName,
         authorid: prevId,
         date: req.body.date,
-        dateformat: date_formated
+        dateformat: req.body.date
       });
       article.save();
       Article.deleteOne({slug:req.params.slugUrl},function(err){
