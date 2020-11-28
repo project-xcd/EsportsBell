@@ -42,7 +42,14 @@
 
 <div id="maincontainer">
     <div class="middlecontainer" id="page-info">
-        Blogs <hr class="main-hr">
+    <%if(approved === 'all'){%> 
+        All Blogs
+    <%}else if(approved === 'approved'){%>
+        Approved Blogs
+    <%}else{%>
+        Unapproved Blogs
+    <%}%>    
+    <hr class="main-hr">
     </div>
     <%for(var i=0;i<articles.length;i++){%>
       <div class="middlecontainer">

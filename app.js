@@ -389,7 +389,7 @@ app.get("/admin",async function(req,res){
               dateformat = date_formated =  moment(onearticle.date).format('MMM Do YY') + ", " + moment(moment(onearticle.date).format('YYMMDDhmmssa'),'YYMMDDhmmssa').fromNow();   
               onearticle.dateformat = dateformat         
         });
-            res.render("admin",{articles:foundArticles,categories:foundCategories});
+            res.render("admin",{articles:foundArticles,approved:'all',categories:foundCategories});
            
           }
         });
@@ -420,7 +420,7 @@ app.get("/admin/approved",async function(req,res){
               dateformat = date_formated =  moment(onearticle.date).format('MMM Do YY') + ", " + moment(moment(onearticle.date).format('YYMMDDhmmssa'),'YYMMDDhmmssa').fromNow();   
               onearticle.dateformat = dateformat         
         });
-            res.render("admin",{articles:foundArticles,categories:foundCategories});
+            res.render("admin",{articles:foundArticles,approved:'approved',categories:foundCategories});
            
           }
         });
@@ -451,7 +451,7 @@ app.get("/admin/unapproved",async function(req,res){
               dateformat = date_formated =  moment(onearticle.date).format('MMM Do YY') + ", " + moment(moment(onearticle.date).format('YYMMDDhmmssa'),'YYMMDDhmmssa').fromNow();   
               onearticle.dateformat = dateformat         
         });
-            res.render("admin",{articles:foundArticles,categories:foundCategories});
+            res.render("admin",{articles:foundArticles,approved:'unapproved',categories:foundCategories});
            
           }
         });
@@ -498,7 +498,6 @@ app.post("/edit/:slugUrl",upload.single('image'),async function(req,res){
       res.redirect("/");
     }
     else{
-      
       date_now = new Date(req.body.date);
       date = ("0" + date_now.getDate()).slice(-2);
       month = ("0" + (date_now.getMonth() + 1)).slice(-2);
@@ -509,7 +508,6 @@ app.post("/edit/:slugUrl",upload.single('image'),async function(req,res){
       var isApproved=false,imageid,imageurl;
       
       if(!file){
-        console.log('no file')
         imageurl= req.body.imgurl;
         imageid = req.body.imgid
       }
@@ -530,7 +528,6 @@ app.post("/edit/:slugUrl",upload.single('image'),async function(req,res){
        })
       }
       if(req.body.approve==="true" && req.user.admin) isApproved=true;
-      
       article=new Article({
         title: req.body.title,
         slug: date+"-"+month+"-"+year+"-"+makeslug,
@@ -553,15 +550,16 @@ app.post("/edit/:slugUrl",upload.single('image'),async function(req,res){
         }
       });
       cloudinary.uploader.destroy(req.body.imgid, function(error,result) {
+        res.redirect("/");
       });
-      res.redirect("/");
     }
   });
-
 });
 
 app.get("/delete/:slugUrl",async function(req,res){
+  var deleteimageid;
   if(req.isAuthenticated()){
+    
     await Article.findOne({slug:req.params.slugUrl},function(err,foundArticle){
       if(err){
         console.log(err);
@@ -577,13 +575,24 @@ app.get("/delete/:slugUrl",async function(req,res){
 });
 
 app.post("/delete/:slugUrl",async function(req,res){
-  await Article.deleteOne({slug:req.params.slugUrl},function(err){
+  await Article.findOne({slug:req.params.slugUrl},async function(err,foundArticle){
+    if(err){
+      console.log(err);
+      res.redirect("/");
+    }
+    else{
+      deleteimageid = foundArticle.imgid;
+    }
+    await Article.deleteOne({slug:req.params.slugUrl},function(err){
     if(err){
       console.log(err);
     }
+    cloudinary.uploader.destroy(deleteimageid, function(error,result) {
+    });
     res.redirect("/");
+    });
   });
-});
+})
 
 
 
