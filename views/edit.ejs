@@ -13,7 +13,7 @@
   <body>
     <div class="container" style="margin-top:6%;background-color:#1F2833;">
       <h1 style="color:white;font-size:3rem;text-align:center;">Edit</h1>
-      <form action="/edit/<%=data.slug%>" method="post" style="padding:5% 5% 5% 5%">
+      <form action="/edit/<%=data.slug%>"enctype="multipart/form-data"  method="post" style="padding:5% 5% 5% 5%">
         <div class="form-group">
           <label for="exampleFormControlTextarea1" style="color:white;">Title</label>
           <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Title" name="title" rows="1"><%=data.title%></textarea>
@@ -32,14 +32,22 @@
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1" style="color:white;">Image URL</label>
-            <input type="text" class="form-control" id="formGroupExampleInput" name="imgurl" placeholder="Image URL" value="<%=data.imgurl%>" required>
+            <input type="text" class="form-control" id="formGroupExampleInput" name="imgurl" placeholder="Image URL" value="<%=data.imgurl%>" required readonly>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect1" style="color:white;">Change Image</label>
+            <input style="background-color: #121112;"size="60" class="btn btn-primary" type="file" class="form-control" id="formGroupExampleInput" name="image" />
           </div>
           <div class="form-group">
             <label for="exampleFormControlSelect1" style="color:white;">Image Info</label>
             <input type="text" class="form-control" id="formGroupExampleInput" name="imgtext" placeholder="Image Info" value="<%=data.imgtext%>" required>
           </div>
           <%if(admin===true){%>
-          <div class="form-group">
+            <div class="form-group">
+              <label for="exampleFormControlSelect1" style="color:white;">Image Public Id</label>
+              <input type="text" class="form-control" id="formGroupExampleInput" name="imgid" placeholder="Image Public Id" value="<%=data.imgid%>" readonly>
+            </div>
+            <div class="form-group">
             <label for="exampleFormControlSelect1" style="color:white;">Approve</label>
             <select class="form-control" id="exampleFormControlSelect1" name="approve">
               <%if(data.approved===true){%>

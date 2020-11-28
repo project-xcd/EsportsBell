@@ -56,6 +56,7 @@ const articleSchema=new mongoose.Schema({
   category: String,
   imgurl: String,
   imgtext: String,
+  imgid: String,
   approved: Boolean,
   author: String,
   authorid: String,
@@ -97,8 +98,8 @@ app.get("/register",function(req,res){
 app.post("/register",function(req,res){
   User.register({username:req.body.username,name:req.body.name,admin:false},req.body.password, async function(err,user){
     if(err){
-      console.log(err);
-      res.redirect("/register");
+      res.send(err.message + " go back and use different email as username.")
+      
     }
     else{
       await passport.authenticate("local")(req,res,function(){
@@ -331,8 +332,10 @@ app.post("/compose",upload.single('image'),async function(req,res){
   await cloudinary.uploader.upload(file.path,async function(error, result) {
     if(!result){
        console.log(error)
+       res.redirect("/");
     }
     else{
+      console.log(result)
       await rimraf("tmp", function(err) {
         if (err) console.log(err);
         mkdirp(__dirname+'/tmp').then()
@@ -352,6 +355,7 @@ app.post("/compose",upload.single('image'),async function(req,res){
       category: req.body.category,
       imgurl: result.secure_url,
       imgtext: req.body.imgtext,
+      imgid: result.public_id,
       approved: isApproved,
       author: req.user.name,
       authorid: req.user._id,
@@ -485,14 +489,16 @@ app.get("/edit/:slugUrl",async function(req,res){
   }
 });
 
-app.post("/edit/:slugUrl",async function(req,res){
+app.post("/edit/:slugUrl",upload.single('image'),async function(req,res){
+  file = req.file;
   var prevName=req.user.name,prevId=req.user._id;
-  await Article.findOne({slug:req.params.slugUrl},function(err,foundArticle){
+  await Article.findOne({slug:req.params.slugUrl},async function(err,foundArticle){
     if(err){
       console.log(err);
       res.redirect("/");
     }
     else{
+      
       date_now = new Date(req.body.date);
       date = ("0" + date_now.getDate()).slice(-2);
       month = ("0" + (date_now.getMonth() + 1)).slice(-2);
@@ -500,15 +506,39 @@ app.post("/edit/:slugUrl",async function(req,res){
       makeslug=req.body.title.replace(/\s+/g, '-').toLowerCase();
       prevName=foundArticle.author;
       prevId=foundArticle.authorid;
-      var isApproved=false;
+      var isApproved=false,imageid,imageurl;
+      
+      if(!file){
+        console.log('no file')
+        imageurl= req.body.imgurl;
+        imageid = req.body.imgid
+      }
+      else{
+        await cloudinary.uploader.upload(file.path, async function(error, result) {
+          if(!result){
+             console.log(error)
+             res.redirect("/");
+          }
+          else{
+            await rimraf("tmp", function(err) {
+              if (err) console.log(err);
+              mkdirp(__dirname+'/tmp').then()
+            });
+             imageurl= result.url;
+             imageid =  result.public_id;
+          }
+       })
+      }
       if(req.body.approve==="true" && req.user.admin) isApproved=true;
+      
       article=new Article({
         title: req.body.title,
         slug: date+"-"+month+"-"+year+"-"+makeslug,
         body: req.body.body,
         category: req.body.category,
-        imgurl: req.body.imgurl,
+        imgurl: imageurl,
         imgtext: req.body.imgtext,
+        imgid: imageid,
         approved: isApproved,
         author: prevName,
         authorid: prevId,
@@ -521,6 +551,8 @@ app.post("/edit/:slugUrl",async function(req,res){
           console.log(err);
           res.redirect("/");
         }
+      });
+      cloudinary.uploader.destroy(req.body.imgid, function(error,result) {
       });
       res.redirect("/");
     }
