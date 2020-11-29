@@ -24,7 +24,7 @@ app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
 app.use(session({
-  secret: "secret",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false
 }));
@@ -335,7 +335,7 @@ app.post("/compose",upload.single('image'),async function(req,res){
        res.redirect("/");
     }
     else{
-      console.log(result)
+    
       await rimraf("tmp", function(err) {
         if (err) console.log(err);
         mkdirp(__dirname+'/tmp').then()
@@ -498,6 +498,7 @@ app.post("/edit/:slugUrl",upload.single('image'),async function(req,res){
       res.redirect("/");
     }
     else{
+      console.log(req.body)
       date_now = new Date(req.body.date);
       date = ("0" + date_now.getDate()).slice(-2);
       month = ("0" + (date_now.getMonth() + 1)).slice(-2);
@@ -549,17 +550,22 @@ app.post("/edit/:slugUrl",upload.single('image'),async function(req,res){
           res.redirect("/");
         }
       });
+       
+      if(!file){
+        res.redirect("/");
+      }
+      else{
       cloudinary.uploader.destroy(req.body.imgid, function(error,result) {
+        console.log(result)
         res.redirect("/");
       });
+      }
     }
   });
 });
 
 app.get("/delete/:slugUrl",async function(req,res){
-  var deleteimageid;
   if(req.isAuthenticated()){
-    
     await Article.findOne({slug:req.params.slugUrl},function(err,foundArticle){
       if(err){
         console.log(err);
@@ -575,6 +581,7 @@ app.get("/delete/:slugUrl",async function(req,res){
 });
 
 app.post("/delete/:slugUrl",async function(req,res){
+  var deleteimageid;
   await Article.findOne({slug:req.params.slugUrl},async function(err,foundArticle){
     if(err){
       console.log(err);
@@ -588,31 +595,12 @@ app.post("/delete/:slugUrl",async function(req,res){
       console.log(err);
     }
     cloudinary.uploader.destroy(deleteimageid, function(error,result) {
+      console.log(result)
     });
     res.redirect("/");
     });
   });
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const PORT=process.env.PORT || 3000;
 app.listen(PORT,function(){
   console.log('Server is running on port '+PORT);

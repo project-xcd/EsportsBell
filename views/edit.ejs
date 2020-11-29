@@ -42,11 +42,12 @@
             <label for="exampleFormControlSelect1" style="color:white;">Image Info</label>
             <input type="text" class="form-control" id="formGroupExampleInput" name="imgtext" placeholder="Image Info" value="<%=data.imgtext%>" required>
           </div>
+          <div class="form-group">
+            
+            <input type="text" class="form-control" id="formGroupExampleInput" name="imgid" placeholder="Image Public Id" value="<%=data.imgid%>" hidden>
+          </div>
           <%if(admin===true){%>
-            <div class="form-group">
-              <label for="exampleFormControlSelect1" style="color:white;">Image Public Id</label>
-              <input type="text" class="form-control" id="formGroupExampleInput" name="imgid" placeholder="Image Public Id" value="<%=data.imgid%>" readonly>
-            </div>
+           
             <div class="form-group">
             <label for="exampleFormControlSelect1" style="color:white;">Approve</label>
             <select class="form-control" id="exampleFormControlSelect1" name="approve">
