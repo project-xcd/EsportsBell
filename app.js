@@ -70,7 +70,7 @@ const CategoriesSchema=new mongoose.Schema({
 });
 const Categories=new mongoose.model("Categories",CategoriesSchema);
 
-app.get('/loaderio-3f201c89b88d0553ca67669a95850cd4',(function(req,res){
+app.get('/loaderio-3f201c89b88d0553ca67669a95850cd4',function(req,res){
   res.send('loaderio-3f201c89b88d0553ca67669a95850cd4')
 })
 //(Routes sequence) login logut register profile /  articles categories compose admin adminapproved adminunapproved edit delete
